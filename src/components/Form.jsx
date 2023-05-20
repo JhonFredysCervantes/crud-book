@@ -13,6 +13,30 @@ const Form = () => {
   const [bookName, setBookName] = useState("");
   const [author, setAuthor] = useState("");
 
+  const saveBook = async (e) => {
+    e.preventDefault();
+    if (!bookName.trim()) {
+      console.log("Empty book name");
+      return;
+    }
+    if (!author.trim()) {
+      console.log("Empty author");
+      return;
+    }
+    console.log(bookName, author);
+    try {
+      const docRef = await addDoc(collection(db, "books"), {
+        bookName: bookName,
+        author: author,
+      });
+      console.log("Document written with ID: ", docRef.id);
+      setBookName("");
+      setAuthor("");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
   return (
     <div className="container-mt-5">
       <h1 className="text-center">Crud of books</h1>
@@ -32,7 +56,7 @@ const Form = () => {
         </div>
         <div className="col-md-4">
           <h3 className="text-center">Add book</h3>
-          <form action="" onSubmit={true}>
+          <form action="" onSubmit={saveBook}>
             <input
               type="text"
               placeholder="Book name"
